@@ -1,3 +1,4 @@
 # SectionOptimisationDistributedActors
 
-![image](https://github.com/user-attachments/assets/5ee5e67c-34b2-43c8-a048-94989d8d7788)
+![image](https://github.com/user-attachments/assets/3e5faa64-bda2-4cf4-aa9f-5feef1940e5d)
+
