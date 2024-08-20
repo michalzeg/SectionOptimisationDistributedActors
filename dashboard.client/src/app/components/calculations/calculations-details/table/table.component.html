@@ -1,0 +1,38 @@
+<p-card>
+  <p-table [value]="(results$ | async) ?? []">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Total weight</th>
+            <th>Max stress</th>
+            <th>Top flange width</th>
+            <th>Top flange thickness</th>
+            <th>Web height</th>
+            <th>Web thickness</th>
+            <th>Bottom flange width</th>
+            <th>Bottom flange thickness</th>
+        </tr>
+        <tr>
+          <th>[kN]</th>
+          <th>[MPa]</th>
+          <th>[mm]</th>
+          <th>[mm]</th>
+          <th>[mm]</th>
+          <th>[mm]</th>
+          <th>[mm]</th>
+          <th>[mm]</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-result>
+        <tr>
+            <td>{{ result.totalWeight | number: '1.0-0'}}</td>
+            <td>{{ result.maxStress | stressFormat }}</td>
+            <td>{{ result.topFlangeWidth | multiplyNumber | numberFormat}}</td>
+            <td>{{ result.topFlangeThickness | multiplyNumber | numberFormat}}</td>
+            <td>{{ result.webHeight | multiplyNumber | numberFormat}}</td>
+            <td>{{ result.webThickness | multiplyNumber | numberFormat}}</td>
+            <td>{{ result.bottomFlangeWidth | multiplyNumber | numberFormat}}</td>
+            <td>{{ result.bottomFlangeThickness | multiplyNumber | numberFormat}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+</p-card>

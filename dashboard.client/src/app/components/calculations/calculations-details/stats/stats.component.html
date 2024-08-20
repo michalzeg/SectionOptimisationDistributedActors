@@ -1,0 +1,32 @@
+<p-card>
+  <div class="p-datatable p-component">
+    <div class="p-datatable-wrapper">
+      <table class="p-datatable-table">
+        <tbody class="p-element p-datatable-tbody">
+          <tr>
+            <td><h3 class="mb-1 mt-1">Status:</h3></td>
+            <td>
+              <div class="flex flex-row align-items-center">
+                <p-progressSpinner styleClass="w-2rem h-2rem" class="mr-1" *ngIf="(finished$ | async) === false"></p-progressSpinner>
+                <p-tag severity="warning" *ngIf="(finished$ | async) === false" >Calculations in progress</p-tag>
+                <p-tag severity="success" *ngIf="(finished$ | async)">Calculations finished</p-tag>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><h3 class="mb-1 mt-1">Time:</h3></td>
+            <td>{{time$ | async}}</td>
+          </tr>
+          <tr>
+            <td><h3 class="mb-1 mt-1">Chromosomes evaluated</h3></td>
+            <td>{{chromosomes$ | async | numberFormat}}</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><p-button label="Remove" (onClick)="remove()" [outlined]="true" severity="danger"></p-button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</p-card>

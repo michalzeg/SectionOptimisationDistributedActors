@@ -1,0 +1,12 @@
+<div class="grid mt-1">
+  <div class="col">
+    <p-card>
+      <div class="flex flex-row flex-wrap">
+        <div *ngFor="let tab of tabs$ | async; let i = index" class="m-1">
+          <p-button [rounded]="true" [outlined]="tab.calculationId !== (currentCalculationId$ | async)" severity="info" (onClick)="tabChanged(tab.calculationId)"> {{tab.label| truncate}}</p-button>
+        </div>
+    </div>
+    </p-card>
+  </div>
+</div>
+<router-outlet></router-outlet>

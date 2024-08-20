@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "GeneticSharpOptimisationBeamOptimisation": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

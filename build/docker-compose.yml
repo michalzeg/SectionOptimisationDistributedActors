@@ -1,0 +1,139 @@
+version: "3.4"
+
+services:
+  mongo:
+    image: mongo:4.4.10
+    hostname: mongo
+    restart: always
+    expose:
+      - "27017"
+
+  coordinator_silo:
+    image: coordinator_silo
+    build:
+      context: ../
+      dockerfile: ./build/Dockerfile
+      args:
+        PROJECT_NAME: Coordinator
+    environment:
+      - WAIT_HOSTS=mongo:27017
+      - WAIT_SLEEP_INTERVAL=10
+      - WAIT_HOSTS_TIMEOUT=300
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MONGO=mongo
+      - DBNAME=OrleansClusterRP
+    deploy:
+      replicas: 1
+    restart: always
+    expose:
+      - "8080"
+      - "30000"
+      - "11111"
+    depends_on:
+      - mongo
+
+  geneticsolver_silo:
+    image: geneticsolver_silo
+    build:
+      context: ../
+      dockerfile: ./build/Dockerfile
+      args:
+        PROJECT_NAME: GeneticSolver
+    environment:
+      - WAIT_HOSTS=coordinator_silo:8080, coordinator_silo:30000, coordinator_silo:11111
+      - WAIT_SLEEP_INTERVAL=10
+      - WAIT_HOSTS_TIMEOUT=300
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MONGO=mongo
+      - DBNAME=OrleansClusterRP
+    deploy:
+      replicas: 1
+    restart: always
+    expose:
+      - "8080"
+      - "30000"
+      - "11111"
+    depends_on:
+      - mongo
+      - coordinator_silo
+
+  femcalculator_silo:
+    image: femcalculator_silo
+    build:
+      context: ../
+      dockerfile: ./build/Dockerfile
+      args:
+        PROJECT_NAME: FemCalculator
+    environment:
+      - WAIT_HOSTS=geneticsolver_silo:8080, geneticsolver_silo:30000, geneticsolver_silo:11111
+      - WAIT_SLEEP_INTERVAL=10
+      - WAIT_HOSTS_TIMEOUT=300
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MONGO=mongo
+      - DBNAME=OrleansClusterRP
+    deploy:
+      replicas: 5
+    restart: always
+    expose:
+      - "8080"
+      - "30000"
+      - "11111"
+    depends_on:
+      - geneticsolver_silo
+
+  fitnessevaluator_silo:
+    image: fitnessevaluator_silo
+    build:
+      context: ../
+      dockerfile: ./build/Dockerfile
+      args:
+        PROJECT_NAME: FitnessEvaluator
+    environment:
+      - WAIT_HOSTS=geneticsolver_silo:8080, geneticsolver_silo:30000, geneticsolver_silo:11111
+      - WAIT_SLEEP_INTERVAL=10
+      - WAIT_HOSTS_TIMEOUT=300
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MONGO=mongo
+      - DBNAME=OrleansClusterRP
+    deploy:
+      replicas: 5
+    restart: always
+    expose:
+      - "8080"
+      - "30000"
+      - "11111"
+    depends_on:
+      - mongo
+      - geneticsolver_silo
+
+  gateway:
+    image: gateway
+    build:
+      context: ../
+      dockerfile: ./build/Dockerfile.Node
+      args:
+        PROJECT_NAME: SectionOptimisation.Gateway
+    environment:
+      - WAIT_HOSTS=coordinator_silo:8080, coordinator_silo:30000, coordinator_silo:11111
+      - WAIT_SLEEP_INTERVAL=10
+      - WAIT_HOSTS_TIMEOUT=300
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - MONGO=mongo
+      - DBNAME=OrleansClusterRP
+    ports:
+      - "5200:8080"
+    restart: always
+    expose:
+      - "30000"
+      - "11111"
+    depends_on:
+      - mongo
+      - femcalculator_silo
+      - coordinator_silo
+      - geneticsolver_silo
+      - fitnessevaluator_silo

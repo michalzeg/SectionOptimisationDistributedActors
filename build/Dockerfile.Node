@@ -1,0 +1,40 @@
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
+WORKDIR /app
+EXPOSE 8080
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+ARG NODE_VERSION=20
+ARG PROJECT_NAME
+WORKDIR /src
+COPY . .
+RUN dotnet restore
+
+RUN apt-get update && \
+    apt-get install -y apt-utils && \
+    apt-get update && \
+    apt-get install -y curl && \
+    curl -sL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - && \
+    apt-get -y install nodejs && \
+    npm install -g @angular/cli
+
+RUN dotnet build "./${PROJECT_NAME}/${PROJECT_NAME}.csproj" -c $BUILD_CONFIGURATION
+
+FROM build AS publish
+ARG PROJECT_NAME
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./${PROJECT_NAME}/${PROJECT_NAME}.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+ARG PROJECT_NAME
+ENV PROJECT_NAME=$PROJECT_NAME
+WORKDIR /app
+COPY --chown=$APP_UID build/wait ./wait
+USER root
+RUN chmod +x ./wait
+USER $APP_UID
+COPY --from=publish /app/publish .
+ENTRYPOINT wait && dotnet ${PROJECT_NAME}.dll

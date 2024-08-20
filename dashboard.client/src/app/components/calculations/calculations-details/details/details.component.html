@@ -1,0 +1,31 @@
+<p-card>
+  <div class="p-datatable p-component">
+    <div class="p-datatable-wrapper">
+      <table class="p-datatable-table">
+        <tbody class="p-element p-datatable-tbody">
+          <tr>
+            <td><app-mutation-header></app-mutation-header></td>
+            <td>{{(input$ | async)?.mutation}}</td>
+          </tr>
+          <tr>
+            <td><app-selection-header></app-selection-header></td>
+            <td>{{(input$ | async)?.selection}}</td>
+          </tr>
+          <tr>
+            <td><app-crossover-header></app-crossover-header></td>
+            <td>{{(input$ | async)?.crossover}}</td>
+          </tr>
+          <tr>
+            <td><app-termination-header></app-termination-header></td>
+            <td>{{(input$ | async)?.termination}}</td>
+          </tr>
+          <tr>
+            <td><app-population-header></app-population-header></td>
+            <td>{{(input$ | async)?.population}}</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</p-card>

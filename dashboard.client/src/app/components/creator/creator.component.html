@@ -1,0 +1,113 @@
+<form [formGroup]="form" class="creator">
+  <p-card>
+    <div class="grid">
+      <div class="col-2">
+        <app-mutation-header></app-mutation-header>
+      </div>
+      <div class="col-2">
+        <app-selection-header></app-selection-header>
+      </div>
+      <div class="col-2">
+        <app-crossover-header></app-crossover-header>
+      </div>
+      <div class="col-2">
+        <app-termination-header></app-termination-header>
+      </div>
+      <div class="col-4">
+        <app-population-header></app-population-header>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-2">
+        <p-dropdown [options]="mutations" formControlName="mutation" [style]="{'width':'100%'}"></p-dropdown>
+      </div>
+      <div class="col-2">
+        <p-dropdown [options]="selections" formControlName="selection" [style]="{'width':'100%'}"></p-dropdown>
+      </div>
+      <div class="col-2">
+        <p-dropdown [options]="crossovers" formControlName="crossover" [style]="{'width':'100%'}"></p-dropdown>
+      </div>
+      <div class="col-2">
+        <div class="flex flex-row justify-content-center align-items-center">
+          <p class="flex-grow-0 mr-5">{{form.value.termination}}</p>
+          <p-slider class="flex-grow-1" formControlName="termination" [min]="10" [max]="100"></p-slider>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="flex flex-row justify-content-center align-items-center">
+          <p class="flex-grow-0 mr-5">{{form.value.population[0]}} - {{form.value.population[1]}}</p>
+          <p-slider class="flex-grow-1" formControlName="population" [range]="true" [step]="1000" [min]="5000" [max]="200000"></p-slider>
+        </div>
+      </div>
+    </div>
+  </p-card>
+  <p-card>
+    <div class="grid">
+      <div class="col-2">
+        <app-header [icon]="''" [title]="'Load'"></app-header>
+      </div>
+      <div class="col-2">
+        <app-header [icon]="''" [title]="'Modulus of elasticity'"></app-header>
+      </div>
+      <div class="col-2">
+        <app-header [icon]="''" [title]="'Weight'"></app-header>
+      </div>
+      <div class="col-2">
+        <app-header [icon]="''" [title]="'Max Stress'"></app-header>
+      </div>
+      <div class="col-2">
+        <app-header [icon]="''" [title]="'Length'"></app-header>
+      </div>
+      <div class="col-2">
+        <app-header [icon]="''" [title]="'Spans'"></app-header>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-2">
+        <p-inputGroup>
+          <p-inputNumber inputId="integeronly" formControlName="load"> </p-inputNumber>
+          <p-inputGroupAddon>kN</p-inputGroupAddon>
+        </p-inputGroup>
+      </div>
+      <div class="col-2">
+        <p-inputGroup>
+          <p-inputNumber inputId="integeronly" formControlName="modulusOfElasticity"> </p-inputNumber>
+          <p-inputGroupAddon>GPa</p-inputGroupAddon>
+        </p-inputGroup>
+      </div>
+      <div class="col-2">
+        <p-inputGroup>
+          <p-inputNumber inputId="integeronly" formControlName="weight"> </p-inputNumber>
+          <p-inputGroupAddon>kN/m<sup>3</sup></p-inputGroupAddon>
+        </p-inputGroup>
+      </div>
+      <div class="col-2">
+        <p-inputGroup>
+          <p-inputNumber inputId="integeronly" formControlName="maxStress"> </p-inputNumber>
+          <p-inputGroupAddon>MPa</p-inputGroupAddon>
+        </p-inputGroup>
+      </div>
+      <div class="col-2">
+        <div class="flex flex-row justify-content-center align-items-center">
+          <p class="flex-grow-0 mr-5">{{form.value.length}}</p>
+          <p-slider class="flex-grow-1" formControlName="length" [step]="10" [min]="1" [max]="30"></p-slider>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="flex flex-row justify-content-center align-items-center">
+          <p class="flex-grow-0 mr-5">{{form.value.spans}}</p>
+          <p-slider class="flex-grow-1" formControlName="spans" [min]="1" [max]="10"></p-slider>
+        </div>
+      </div>
+    </div>
+  </p-card>
+  <p-card>
+    <div class="grid">
+      <div class="col">
+        <app-header [icon]="''" [title]="'Label'"></app-header>
+        <input type="text" pInputText formControlName="label" class="mr-5"/>
+        <p-button label="Start" severity="success" (onClick)="onSubmit()" [disabled]="!form.valid"></p-button>
+      </div>
+    </div>
+  </p-card>
+</form>

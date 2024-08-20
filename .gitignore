@@ -1,0 +1,6 @@
+bin
+obj
+/dashboard.client/.angular
+/dashboard.client/.nx
+/dashboard.client/.vscode
+.vs
